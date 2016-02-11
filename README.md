@@ -9,19 +9,28 @@ Neural Network sample
  * PIL(python image library)
 
 ## Sample usage
-clone this repository and change directory to deep_learning home
+clone this repository and change directory to deep\_learning home
 ```
 git clone https://github.com/satoshishimada/deep_learning.git
 cd deep_learning
 ```
 
 * logical operation
-  execute script  
-  ```python train_logic.py```
+ execute script  
+ ```python train_logic.py```
 
 * mnist
  execute script  
  ```python train_mnist.py```
+
+## Features
+
+* Mini batch
+* Drop out
+* Momentum
+* Activation function
+ * Sigmoid function
+* Save and load parameter
 
 ## Author
 SatoshiSHIMADA
