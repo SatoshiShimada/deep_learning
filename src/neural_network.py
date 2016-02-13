@@ -82,19 +82,16 @@ class Neural_Network(object):
         Z = [np.zeros((n, N)) for n in self.layer]
         Z[0] = X
         for l in xrange(1, self.num_layers):
-            #buf = np.dot(self.weights[l-1], Z[l-1]) + np.dot(self.biases[l-1], np.ones((1, N))) 
-            buf = np.dot(dropout_weight[l-1], Z[l-1]) + np.dot(self.biases[l-1], np.ones((1, N))) 
-            U[l-1] = buf
+            U[l-1] = np.dot(dropout_weight[l-1], Z[l-1]) + np.dot(self.biases[l-1], np.ones((1, N))) 
             Z[l] = sigmoid_vec(U[l-1])
 
         Y = Z[-1]
 
         # back propagation
-        # calc error
         Delta = [np.zeros((l, N)) for l in self.layer[1:]]
+        # calc error
         Delta[-1] = Y - D
         for l in xrange(2, self.num_layers):
-            #Delta[-l] = sigmoid_prime_vec(U[-l]) * np.dot(self.weights[-l+1].transpose(), Delta[-l+1])
             Delta[-l] = sigmoid_prime_vec(U[-l]) * np.dot(dropout_weight[-l+1].transpose(), Delta[-l+1])
         
         prev_delta_w = [np.zeros((x, y)) for x, y in zip(self.layer[1:], self.layer[:-1])]
@@ -103,7 +100,6 @@ class Neural_Network(object):
             dw = (1/N) * np.dot(Delta[l-1], Z[l-1].transpose())
             db = (1/N) * np.dot(Delta[l-1], np.ones((N, 1)))
 
-            #delta_w = -1.0 * learning_rate * (dw + self.lambda_ * self.weights[l-1]) + self.alpha * prev_delta_w[l-1]
             delta_w = -1.0 * learning_rate * (dw + self.lambda_ * dropout_weight[l-1]) + self.alpha * prev_delta_w[l-1]
             delta_b = -1.0 * learning_rate * db + self.alpha * prev_delta_b[l-1]
             self.weights[l-1] += delta_w
